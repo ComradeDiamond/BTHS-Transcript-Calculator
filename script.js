@@ -136,7 +136,7 @@ function crSpoof() { //Shows you which grades should be CRed
         let cObjCr = cObj.querySelector('input[name="crHTML"]');
 
         //Ignore the items without a grade
-        if(cObjGrade == NaN) 
+        if(isNaN(cObjGrade)) 
         {
             continue;
         }
