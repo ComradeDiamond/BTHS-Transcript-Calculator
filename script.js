@@ -38,15 +38,17 @@ function createEntity() { //Creates a new bracket column for people to put grade
     inputDiv.id = inputId; //We're going to use for loop and concat to get the grades later
 
     let classNameSpan = new CreateElement("span", "Class Name: ", "classNameHTML", "classNameCSS", "text");
-    let gradeSpan = new CreateElement("span", "&emsp; Unweighed Grade: ", "gradeHTML", "gradeCSS", "number", 0, 100);
+    let gradeSpan = new CreateElement("span", "&emsp; Grade: ", "gradeHTML", "gradeCSS", "number", 0, 100);
     let collegeSpan = new CreateElement("span", "&emsp; Is it AP/PLTW: ", "collegeHTML", "checkboxCSS", "checkbox");
     let creditSpan = new CreateElement("span", "&emsp; Credits: ", "creditNumHTML", "creditNumCSS", "number", 0);
     let crSpan = new CreateElement("span", "&emsp; CR? ", "crHTML", "checkboxCSS", "checkbox");
+    let smSpan = new CreateElement("span", "&emsp; This Semester?", "thisSemesterHTML", "checkboxCSS", "checkbox");
 
     inputDiv.appendChild(classNameSpan);
     inputDiv.appendChild(gradeSpan);
     inputDiv.appendChild(collegeSpan);
     inputDiv.appendChild(creditSpan);
+    inputDiv.appendChild(smSpan);
     inputDiv.appendChild(crSpan);
 
     inputSection.appendChild(inputDiv);
@@ -109,12 +111,12 @@ function calcGrade() {
     }
 
     //Divide the total average by the credit number and puts it in the frontend
-    finalNum = (sumAverage / sumCredits).toFixed(3);
-    display(finalNum);
+    finalNum = (sumAverage / sumCredits);
+    display();
 }
 
 function display() { //Displays the grade!
-    gradeSpanHTML.innerHTML = finalNum;
+    gradeSpanHTML.innerHTML = finalNum.toFixed(3);
 }
 
 function crSpoof() { //Shows you which grades should be CRed
@@ -153,11 +155,12 @@ function crSpoof() { //Shows you which grades should be CRed
 
         /*If the true grade < the final average, it marks green if it sees that you have CRed the thing successfully. 
         It marks red if it sees you did not CR the thing and suggests you do so
-        If it is not < than the final average, it leaves it alone*/
+        If it is not < than the final average, it leaves it alone
+        New Edit: Also checks whether it is CRable*/
 
         if(document.body.querySelector(`input[name="conservativeEstimate"]`).checked) //If conservative estimate mode is on, it uses *+-3 points range
         {
-            if(trueGrade < (finalNum - 3)) 
+            if(trueGrade < (finalNum - 3) && cObj.querySelector(`input[name="thisSemesterHTML"]`).checked) 
             {
                 if(cObjCr.checked) 
                 {
@@ -175,7 +178,7 @@ function crSpoof() { //Shows you which grades should be CRed
             continue;
         }
 
-        if(trueGrade < finalNum) 
+        if(trueGrade < finalNum && cObj.querySelector(`input[name="thisSemesterHTML"]`).checked) 
         {
             if(cObjCr.checked) 
             {
